@@ -1,19 +1,346 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Visuellt | Taboola</title>
-    <meta name="description" content="taboola klick realtid visualisering">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/main.css">
+    <meta charset="UTF-8">
+    <title></title>
+
+    <style>
+        html, body {
+            overflow: hidden;
+            font-family: sans-serif;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #world-map path {
+            fill: #164A7C;
+            stroke: #FFFFF;
+
+        }
+        circle{
+            animation-name: blink;
+            animation-fill-mode: forwards;
+            animation-duration: 2s;
+            fill: #8CC10C;
+            opacity: 0;
+            transform: scale(0,0);
+            transform-origin: center center;
+        }
+
+        #click-clock{
+            font-family: sans-serif;
+            position: absolute;
+            left: 3%;
+            bottom: 0;
+        }
+
+        #world-info{
+            background-color: rgba(255,255,255,0.8);
+            color: #222;
+            position: absolute;
+            bottom: 5%;
+            width: 250px;
+            left:3%;
+        }
+
+        #taboola-bubble{
+            transform: scale(0,0);
+            transition: all 2s ease-in-out;
+            position: absolute;
+            z-index: 9;
+            top: 0;
+            left: 50%;
+            margin-left: -2500px;
+            top: 50%;
+            margin-top: -2500px;
+            background-color: #164A7C;
+            border-radius: 50%;
+            width: 5000px;
+            height: 5000px;
+
+        }
+
+        #taboola-bubble svg{
+
+            margin: calc(50% - 75px) auto ;
+            display: block;
+            fill: #ffffff;
+        }
+
+        #taboola-bubble.show{
+            transform: scale(1,1);
+        }
+
+        @-webkit-keyframes blink{
+            0%{
+                opacity: 0;
+                transform: scale(0,0);
+            }
+            20%
+            {
+                opacity: 0.8;
+                transform: scale(1,1);
+            }
+            100%{
+                opacity: 0;
+                transform: scale(0,0);
+            }
+        }
+
+        @keyframes blink{
+            0%{
+                opacity: 0;
+                transform: scale(0,0);
+            }
+            20%
+            {
+                opacity: 0.8;
+                transform: scale(1,1);
+            }
+            100%{
+                opacity: 0;
+                transform: scale(0,0);
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 </head>
 <body>
+<div id="world-map" class="container">
+</div>
 
-<article data-type="exempel"></article>
+<div id="world-info"></div>
 
-<script src="js/vendor/jquery-1.11.3.min.js"></script>
-<script src="js/main.js"></script>
+<div id="click-clock"><button type="button" class="btn btn-default"></button></div>
 
+<div id="taboola-bubble">
+
+    <svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+         style="width:100%;height:100px;"  viewBox="0 0 855.000000 207.000000"
+         preserveAspectRatio="xMidYMid meet ">
+        <g transform="translate(0.000000,207.000000) scale(0.100000,-0.100000)" style="fill: #fff; stroke: none;">
+            <path d="M0 1840 l0 -230 158 0 c88 0 200 -3 250 -6 l91 -7 -6 -657 -6 -657
+274 -6 c150 -3 276 -3 279 -1 3 3 6 302 8 665 l4 659 249 0 249 0 0 228 0 229
+-562 6 c-310 4 -659 7 -775 7 l-213 0 0 -230z"/>
+            <path d="M4467 2055 c-265 -50 -451 -225 -514 -483 -22 -91 -22 -285 1 -372
+60 -237 228 -408 463 -472 111 -30 344 -30 454 0 143 38 263 115 342 218 l42
+54 19 -27 c11 -16 50 -58 88 -95 79 -79 189 -136 308 -163 99 -22 299 -23 400
+-1 91 19 218 79 282 132 146 122 228 314 228 534 0 329 -179 574 -480 657 -93
+25 -368 25 -460 -1 -132 -37 -258 -116 -331 -209 -23 -29 -45 -53 -49 -55 -4
+-2 -17 13 -29 32 -60 97 -221 203 -366 241 -87 23 -301 28 -398 10z m278 -378
+c30 -16 48 -37 70 -82 29 -58 30 -64 30 -200 0 -161 -15 -222 -68 -273 -40
+-39 -75 -52 -135 -52 -139 1 -205 101 -206 310 0 164 39 265 116 303 50 25
+144 22 193 -6z m1223 -4 c78 -37 119 -163 110 -334 -6 -104 -34 -192 -71 -227
+-82 -78 -232 -65 -292 25 -58 89 -71 304 -25 426 23 61 73 113 118 123 15 3
+32 7 37 10 18 6 88 -7 123 -23z"/>
+            <path d="M2549 1838 c-1 -117 -5 -517 -8 -888 -6 -646 -7 -673 -23 -637 -33
+72 -38 147 -38 552 0 322 -3 412 -15 458 -38 148 -146 226 -359 263 -134 23
+-460 15 -569 -14 -195 -53 -317 -176 -334 -335 l-6 -57 229 0 230 0 19 43 c27
+56 77 81 165 81 103 0 160 -41 160 -114 0 -44 -23 -78 -64 -95 -18 -8 -115
+-25 -217 -39 -282 -39 -400 -80 -486 -166 -110 -110 -131 -301 -50 -453 74
+-139 224 -204 452 -194 148 6 229 30 313 91 l60 45 7 -50 c4 -28 12 -52 19
+-54 6 -2 230 -6 499 -10 l487 -6 0 69 0 70 58 -57 c86 -87 141 -105 312 -106
+118 0 142 3 192 23 175 71 307 249 353 481 24 117 16 344 -15 451 -59 202
+-186 340 -356 385 -71 19 -223 21 -284 5 -68 -18 -138 -57 -189 -105 l-46 -43
+3 309 4 309 -251 0 -251 0 -1 -212z m776 -627 c49 -22 68 -43 97 -106 21 -45
+23 -65 23 -190 0 -125 -2 -145 -23 -190 -42 -92 -94 -128 -182 -128 -143 0
+-214 106 -214 318 1 154 42 251 124 293 54 27 120 28 175 3z m-1325 -440 c0
+-114 -33 -180 -108 -213 -25 -11 -67 -20 -93 -20 -150 0 -212 154 -88 217 14
+8 72 26 130 40 57 15 110 30 119 35 34 20 40 12 40 -59z"/>
+            <path d="M6627 1428 c-4 -331 -7 -733 -7 -895 l0 -293 250 0 250 0 0 318 c0
+174 3 577 7 895 l6 577 -250 0 -250 0 -6 -602z"/>
+            <path d="M7682 1560 c-284 -36 -440 -159 -468 -369 l-7 -51 236 0 235 0 6 34
+c4 18 14 40 24 49 79 71 255 57 297 -23 33 -64 -3 -128 -84 -149 -20 -6 -118
+-21 -218 -35 -211 -30 -318 -61 -400 -115 -103 -69 -145 -146 -151 -277 -5
+-106 11 -173 57 -246 82 -129 278 -196 497 -169 116 14 186 40 264 97 l60 44
+0 -38 c0 -20 3 -47 6 -59 l6 -23 249 0 c164 0 249 4 249 10 0 6 -10 39 -22 73
+-22 61 -22 71 -20 452 3 414 -3 509 -40 584 -47 98 -149 164 -303 196 -95 19
+-367 28 -473 15z m338 -794 c0 -70 -18 -148 -44 -187 -63 -94 -243 -104 -297
+-15 -49 80 -4 150 116 180 39 10 102 28 140 41 39 12 73 23 78 24 4 0 7 -19 7
+-43z"/>
+            <path d="M4120 500 l0 -220 58 -29 c174 -87 442 -174 657 -212 114 -20 163
+-23 400 -24 212 0 295 4 385 18 232 36 426 92 639 182 l111 48 0 218 c0 121
+-1 219 -3 219 -2 0 -84 -27 -183 -59 -360 -119 -534 -146 -934 -145 -332 0
+-464 15 -714 78 -124 32 -328 102 -388 132 l-28 15 0 -221z"/>
+        </g>
+    </svg>
+
+</div>
+
+<script src="lib/d3.js"></script>
+<script src="lib/topojson.v1.min.js"></script>
+<script src="lib/projection.js"></script>
+
+
+<script>
+    var size = {width: document.body.offsetWidth, height: document.body.offsetHeight};
+    var svg;
+    function renderWorld(arr, world) {
+
+        console.log(world, size);
+        var countries = topojson.feature(world, world.objects.countries).features,
+                projection = d3.geo.mercator()
+                        .scale(150)
+                        .translate([size.width / 2, size.height / 2])
+                        .precision(0.1),
+                path = d3.geo.path().projection(projection);
+        svg = d3.select(document.querySelector("#world-map")).append("svg")
+                .attr("class", 'world')
+                .attr("width", size.width)
+                .attr("height", size.height);
+        svg.selectAll(".country")
+                .data(countries)
+                .enter().insert("path")
+                .attr("class", "country")
+                .attr("d", path);
+    }
+    d3.json('data/world-50m.json', renderWorld);
+
+    setInterval(getData, 60*1000);
+
+    var i = 0;
+
+    getData();
+
+    function getData() {
+        d3.json('http://52.11.153.209:8080/stats/clicks', renderClick);
+        i += 1;
+        if(i>1) {
+            document.querySelector("#taboola-bubble").classList.add("show");
+
+
+            setTimeout(function () {
+                document.querySelector("#taboola-bubble").classList.remove("show");
+            }, 1000 * 3);
+        }
+    }
+
+    function renderClick(err, hist) {
+        var projection = d3.geo.mercator()
+                .scale(150)
+                .translate([size.width / 2, size.height / 2])
+                .precision(0.1);
+        hist = hist.data;
+        hist.forEach(function (d) {
+            d.location = projection([d.longitude, d.latitude])
+        });
+
+        var x = svg.selectAll("circle").remove()
+                .data(hist);
+        x.enter().append("circle")
+                .attr("cx", function(d){return d.location[0];})
+                .attr("cy", function(d){return d.location[1];})
+                .attr("r", 5)
+                .style("animation-delay", function(d){return Math.random()*58*1000 + "ms"});
+        x.exit().remove();
+
+        //console.log(hist, svg);
+        console.log(hist[0]);
+
+        var time = new Date(hist[0].eventTime);
+        console.log(time);
+
+        document.querySelector("#click-clock button").innerHTML = "Click timestamp: "
+                + time.getHours() + ":"
+                + time.getMinutes() + ":" + secondsWithZero();
+
+        function secondsWithZero(){
+            var sec = time.getSeconds();
+
+            if(time.getSeconds() < 10)
+            {
+                sec = "0" + sec;
+            }
+
+            return sec;
+        }
+
+        analysis(hist);
+
+    }
+
+    function analysis(hist)
+    {
+        var countries = {};
+        var cities = {};
+
+        hist.forEach(function(d){
+           countries[d.countryName] = (countries[d.countryName] || 0) + 1;
+            cities[d.city] = (cities[d.city] || 0) + 1;
+        });
+
+        var cityList = getTopFive(cities).map(function(d){
+            return `
+            <tr>
+                <td>${d.k}</td>
+                <td>${d.v}</td>
+            </tr>`;
+
+        }).join('');
+
+        var countryList = getTopFive(countries).map(function(d){
+            return `<tr>
+                <td>${d.k}</td>
+                <td>${d.v}</td>
+            </tr>`;
+
+        }).join('');
+
+        document.querySelector("#world-info").innerHTML=`
+    <h2>Top 5 Cities</h2>
+    <table class="table table-bordered">
+            <thead>
+            <tr>
+            <th>Cities</th>
+            <th>Clicks</th>
+            </tr>
+            </thead>
+            <tbody>
+                ${cityList}
+            </tbody>
+            </table>
+
+            <h2>Top 5 Countries</h2>
+    <table class="table table-bordered">
+            <thead>
+            <tr>
+            <th>Countries</th>
+            <th>Clicks</th>
+            </tr>
+            </thead>
+            <tbody>
+                ${countryList}
+            </tbody>
+            </table>
+`;
+
+        console.log(getTopFive(countries));
+        console.log(getTopFive(cities));
+    }
+
+    function getTopFive(map)
+    {
+        var keys = Object.keys(map).filter(function(d){
+            return d !== "UNKNOWN" && d !== "null";
+        }).sort(function(a,b){
+            return map[b]-map[a];
+        });
+
+        var a = keys.map(function(d){
+            return {k:d, v: map[d]};
+        });
+
+        a.length = 5;
+
+        return a;
+    }
+</script>
 </body>
+
+
 </html>
